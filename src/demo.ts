@@ -3,22 +3,21 @@
 
 import { Lexer } from "./lexer/Lexer.js";
 import { Parser } from "./parser/Parser.js";
+import * as fs from "fs";
+import * as path from "path";
 
-const sampleCode = `
-class Calculator {
-  constructor() {
-    this.result = 0;
-  }
-  
-  add(a, b) {
-    return a + b;
-  }
-  
-  subtract(a, b) {
-    return a - b;
-  }
+// Get file from command line or use default
+const args = process.argv.slice(2);
+const inputFile = args[0] || "examples/Calculator.js";
+
+let sampleCode: string;
+try {
+  sampleCode = fs.readFileSync(inputFile, "utf-8");
+  console.log(`📂 Reading: ${inputFile}\n`);
+} catch (error) {
+  console.error(`❌ Error: File '${inputFile}' not found`);
+  process.exit(1);
 }
-`;
 
 console.log("═".repeat(70));
 console.log("                LEXER AND PARSER DEMONSTRATION");

@@ -12,6 +12,8 @@ export interface CompilationResult {
   warnings: SemanticError[];
   ast?: any;
   tokens?: any;
+  tokenCount?: number;
+  astNodeCount?: number;
 }
 
 export interface CompilerOptions extends GeneratorOptions {
@@ -73,6 +75,8 @@ export class Compiler {
           success: false,
           errors,
           warnings,
+          tokenCount: tokens.length,
+          astNodeCount: this.countASTNodes(ast),
           ast: this.options.debug ? ast : undefined,
           tokens: this.options.debug ? tokens : undefined,
         };
@@ -97,6 +101,8 @@ export class Compiler {
         solidityCode,
         errors,
         warnings,
+        tokenCount: tokens.length,
+        astNodeCount: this.countASTNodes(ast),
         ast: this.options.debug ? ast : undefined,
         tokens: this.options.debug ? tokens : undefined,
       };
@@ -132,4 +138,38 @@ export class Compiler {
       };
     }
   }
-}
+  private countASTNodes(node: any): number {
+    if (!node) return 0;
+    let count = 1;
+    if (node.body && Array.isArray(node.body)) {
+      count += node.body.reduce((sum: number, item: any) => sum + this.countASTNodes(item), 0);
+    }
+    if (node.params && Array.isArray(node.params)) {
+      count += node.params.reduce((sum: number, item: any) => sum + this.countASTNodes(item), 0);
+    }
+    if (node.expression) {
+      count += this.countASTNodes(node.expression);
+    }
+    if (node.consequent) {
+      count += this.countASTNodes(node.consequent);
+    }
+    if (node.alternate) {
+      count += this.countASTNodes(node.alternate);
+    }
+    if (node.init) {
+      count += this.countASTNodes(node.init);
+    }
+    if (node.test) {
+      count += this.countASTNodes(node.test);
+    }
+    if (node.update) {
+      count += this.countASTNodes(node.update);
+    }
+    if (node.left) {
+      count += this.countASTNodes(node.left);
+    }
+    if (node.right) {
+      count += this.countASTNodes(node.right);
+    }
+    return count;
+  }}
