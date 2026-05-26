@@ -156,7 +156,13 @@ async function compileCode() {
       updateStatus("Compilation Successful ✓", false);
       updateStats(result.errors.length, result.warnings.length, result.tokenCount, result.astNodeCount);
     } else {
-      showError(result.error || "Compilation failed");
+      // Show detailed errors if available
+      if (result.errors && result.errors.length > 0) {
+        displayErrors(result.errors, result.warnings);
+        updateStats(result.errors.length, result.warnings.length, result.tokenCount, result.astNodeCount);
+      } else {
+        showError(result.error || "Compilation failed");
+      }
       updateStatus("Compilation Failed", false);
     }
   } catch (error) {
@@ -210,6 +216,49 @@ function displayOutput(solidity, errors, warnings) {
     });
 
     errorsContainer.style.display = "block";
+  }
+}
+
+// Display errors and warnings only (no Solidity output)
+function displayErrors(errors, warnings) {
+  // Hide placeholder and output
+  outputPlaceholder.style.display = "none";
+  codeOutput.style.display = "none";
+  errorsContainer.style.display = "none";
+
+  // Clear previous content
+  errorsContainer.innerHTML = "";
+
+  // Display errors and warnings
+  if (errors.length > 0 || warnings.length > 0) {
+    errors.forEach((error) => {
+      const errorDiv = document.createElement("div");
+      errorDiv.className = "error-item";
+      errorDiv.innerHTML = `
+        <div class="error-type">❌ Compilation Error</div>
+        <div class="error-message"><strong>${escapeHtml(error.message)}</strong></div>
+        ${error.line ? `<div class="error-location">📍 Line ${error.line}${error.column ? `, Column ${error.column}` : ''}</div>` : ""}
+      `;
+      errorsContainer.appendChild(errorDiv);
+    });
+
+    warnings.forEach((warning) => {
+      const warningDiv = document.createElement("div");
+      warningDiv.className = "warning-item";
+      warningDiv.innerHTML = `
+        <div class="warning-type">⚠️ Warning</div>
+        <div class="warning-message">${escapeHtml(warning.message)}</div>
+        ${warning.line ? `<div class="error-location">📍 Line ${warning.line}${warning.column ? `, Column ${warning.column}` : ''}</div>` : ""}
+      `;
+      warningDiv.style.marginBottom = "8px";
+      errorsContainer.appendChild(warningDiv);
+    });
+
+    errorsContainer.style.display = "block";
+    errorsContainer.scrollTop = 0;
+  } else {
+    // No specific errors, show generic message
+    showError("Compilation failed: Check your code syntax");
   }
 }
 

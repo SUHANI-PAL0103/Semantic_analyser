@@ -334,40 +334,53 @@ body {
 
 /* Errors Container */
 .errors-container {
-    padding: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
 }
 
 .error-item {
-    background-color: rgba(244, 135, 113, 0.1);
-    border-left: 3px solid var(--error);
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 2px;
-    font-size: 12px;
+    background-color: rgba(244, 135, 113, 0.15);
+    border-left: 4px solid var(--error);
+    padding: 16px;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
 .error-type {
     color: var(--error);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
 }
 
 .error-message {
     color: var(--text-primary);
-    margin-top: 4px;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.error-message strong {
+    color: #ff9999;
+    font-weight: 600;
 }
 
 .error-location {
     color: var(--text-secondary);
-    font-size: 11px;
-    margin-top: 4px;
+    font-size: 13px;
+    margin-top: 8px;
+    font-family: 'Courier New', monospace;
 }
 
 .warning-item {
     background-color: rgba(220, 220, 170, 0.1);
-    border-left: 3px solid var(--warning);
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 2px;
+    border-left: 4px solid var(--warning);
+    padding: 16px;
+    border-radius: 4px;
     font-size: 12px;
 }
 
