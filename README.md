@@ -1,282 +1,517 @@
-# Compiler Project - Lexer and Parser Implementation 🔍
+# JS to Solidity Compiler 🔗
 
-A compiler frontend implementation focusing on **Lexical Analysis** and **Syntax Analysis** for JavaScript code.
+A complete compiler that converts JavaScript code into Solidity smart contracts with semantic analysis, error detection, and real-time feedback.
 
-## 🎯 What We've Implemented
+**Transform JavaScript classes into production-ready Solidity contracts instantly.**
 
-### Phase 1: Compiler Frontend (Complete ✅)
-- **Lexer (Lexical Analyzer)** → Tokenizes source code into tokens
-- **Parser (Syntax Analyzer)** → Builds Abstract Syntax Tree (AST)
+---
 
-### Architecture Flow
+## 📋 Table of Contents
 
-```
-JavaScript Source Code
-        ↓
-    📝 LEXER (Tokenization)
-        ↓
-    🌳 PARSER (AST Generation)
-```
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Web Interface](#web-interface)
+- [Compilation Pipeline](#compilation-pipeline)
+- [Supported Features](#supported-features)
+- [Limitations](#limitations)
+- [Examples](#examples)
+- [Architecture](#architecture)
+- [Commands](#commands)
+- [Recent Improvements](#recent-improvements)
 
-## 📁 Project Structure
+---
 
-```
-src/
-├── lexer/                    ← ✅ IMPLEMENTED
-│   ├── Lexer.ts             # Tokenization logic
-│   └── Token.ts             # Token type definitions
-│
-├── parser/                   ← ✅ IMPLEMENTED
-│   ├── Parser.ts            # Syntax analysis & AST builder
-│   └── AST.ts               # AST node type definitions
-│
-└── demo.ts                   # Demo showing Lexer + Parser output
-```
+## ✨ Features
 
-## 🚀 Quick Start
+### Core Capabilities
+- ✅ **Live Web Compiler** - Interactive UI at `http://localhost:3001`
+- ✅ **Complete Compilation Pipeline** - Lexer → Parser → Semantic Analyzer → Code Generator
+- ✅ **Real-time Error Detection** - Detailed error messages with line/column numbers
+- ✅ **Type Inference** - Automatic JavaScript to Solidity type conversion
+- ✅ **Semantic Analysis** - Variable scope checking, type compatibility, duplicate detection
+- ✅ **Template Examples** - Pre-built Calculator, Counter, and Bank examples
 
-### 1. Install Dependencies
+### Web Interface Features
+- 📝 Live code editor with syntax highlighting and line numbers
+- ❌ Detailed error messages with exact location
+- ⚠️ Warning notifications
+- 📊 Compilation statistics (tokens, AST nodes, errors)
+- 📋 Copy-to-clipboard functionality
+- 🎨 VS Code-style dark theme
+
+---
+
+## 🚀 Getting Started
+
+### Installation
+
 ```bash
+# Clone the repository
+git clone https://github.com/SUHANI-PAL0103/Semantic_analyser.git
+cd Semantic_analyser
+
+# Install dependencies
 npm install
 ```
 
-### 2. Build the Project
-```bash
-npm run build
-```
+### Running the Compiler
 
-### 3. Run the Web Interface
+#### Option 1: Web Interface (Recommended)
+
 ```bash
 npm run web
 ```
 
-Then open your browser at: **http://localhost:3001**
+Then open **http://localhost:3001** in your browser.
 
-### 4. Run the Demo (CLI)
+#### Option 2: CLI Demo
+
 ```bash
-node dist/demo.js
+npm run demo
 ```
 
-This will show:
-- ✅ Complete token list with line numbers
-- ✅ Full Abstract Syntax Tree (AST) in JSON format
+Shows the complete compilation process with tokens and AST.
+
+#### Option 3: Compile Files Directly
+
+```bash
+npm run compile examples/Counter.js
+npm run compile examples/Calculator.js
+npm run compile examples/SimpleBank.js
+```
+
+---
 
 ## 🌐 Web Interface
 
-The project includes an interactive web compiler at `http://localhost:3001`:
-
-- **Live Code Editor** - Write JavaScript and see errors in real-time
-- **Template Examples** - Calculator, Counter, and Bank examples
-- **Real-time Error Display** - Detailed error messages with line and column numbers
-- **Solidity Output Panel** - View generated Solidity code
-- **Statistics** - Token count, AST nodes, and error/warning counts
+The interactive compiler available at `http://localhost:3001`:
 
 ### Features
-✅ Syntax highlighting with line numbers  
-✅ Detailed error messages showing exact location  
-✅ Copy to clipboard functionality  
-✅ Save/Clear buttons for code management  
-✅ Responsive VS Code-style interface
+- **Code Editor** - Left panel with syntax highlighting and line numbers
+- **Error Panel** - Real-time error/warning display with exact locations
+- **Solidity Output** - Right panel showing generated Solidity code
+- **Templates** - Quick-load examples (Calculator, Counter, Bank)
+- **Statistics** - Token count, AST node count, error count
+- **Actions** - Save, Clear, Copy to clipboard, Convert buttons
 
-## 📊 What the Demo Shows
+### How to Use
 
-### Step 1: Lexical Analysis
-The lexer breaks down source code into tokens:
+1. Write JavaScript code in the left panel (or click a template)
+2. Click "Convert to Solidity" button
+3. View:
+   - ✅ Solidity output in the right panel (if successful)
+   - ❌ Error messages (if there are issues)
+4. Fix errors based on detailed error messages with line numbers
+
+---
+
+## 🔄 Compilation Pipeline
+
 ```
-CLASS                "class"              [Line 2:1]
-IDENTIFIER           "Calculator"         [Line 2:7]
-LBRACE               "{"                  [Line 2:18]
-CONSTRUCTOR          "constructor"        [Line 3:3]
-...
+JavaScript Source Code
+        ↓
+   📝 LEXER (Tokenization)
+        ↓ Tokens
+   🌳 PARSER (AST Generation)
+        ↓ AST
+   🔍 SEMANTIC ANALYZER (Type Checking & Validation)
+        ↓ Symbol Table
+   ⚙️ CODE GENERATOR (Solidity Output)
+        ↓
+   ✅ Solidity Contract
 ```
 
-### Step 2: Syntax Analysis
-The parser builds an Abstract Syntax Tree:
-```json
-{
-  "type": "PROGRAM",
-  "body": [
-    {
-      "type": "CLASS_DECLARATION",
-      "name": "Calculator",
-      "constructor": { ... },
-      "methods": [ ... ]
-    }
-  ]
-}
-```
+### Stage Details
 
-## 📘 Example
+**1. Lexer** - Tokenizes source code
+- Breaks code into meaningful tokens (keywords, identifiers, operators, etc.)
+- Tracks line and column information
 
-### Input (JavaScript)
+**2. Parser** - Builds Abstract Syntax Tree (AST)
+- Creates hierarchical representation of code structure
+- Validates syntax rules
 
+**3. Semantic Analyzer** - Type checking and validation
+- Checks for undefined variables
+- Validates type compatibility
+- Detects duplicate declarations
+- Builds symbol table
+
+**4. Code Generator** - Produces Solidity code
+- Converts JavaScript constructs to Solidity equivalents
+- Handles type conversions (JavaScript types → Solidity types)
+- Generates valid smart contract code
+
+---
+
+## ✅ Supported Features
+
+## ✅ Supported Features
+
+### JavaScript Constructs That Compile
+
+| Feature | Example |
+|---------|---------|
+| Classes | `class Counter { ... }` |
+| Constructors | `constructor() { this.count = 0; }` |
+| Methods | `increment() { this.count++; }` |
+| Properties | `this.balance = 100` |
+| Variables | `let x = 5; const y = 10;` |
+| Functions | `function add(a, b) { return a + b; }` |
+| Operators | `+`, `-`, `*`, `/`, `%`, `==`, `<`, `>`, `&&`, `\|\|` |
+| Control Flow | `if/else`, `while`, `for` |
+| Member Access | `obj.property` |
+| Function Calls | `this.method()`, `function()` |
+| Return Statements | `return value` |
+| The `this` Keyword | Reference to current contract |
+
+### Type Conversion
+
+| JavaScript | Solidity |
+|-----------|----------|
+| Number | `uint256` |
+| String | `string` |
+| Boolean | `bool` |
+| null | `address(0)` |
+
+### Semantic Checks
+
+- ✅ Undefined variable detection
+- ✅ Type compatibility validation
+- ✅ Duplicate declaration prevention
+- ✅ Symbol table tracking
+- ✅ Detailed error messages with line/column numbers
+
+---
+
+## ⚠️ Limitations (Why Some JavaScript Features Aren't Supported)
+
+### Not Supported Features
+
+| Feature | Reason |
+|---------|--------|
+| Array `.length` | Solidity arrays are fixed-size, no length property |
+| `Math` functions | No Math library in Solidity (use manual calculations) |
+| Dynamic arrays | Must declare fixed size: `uint256[10]` |
+| Array literals | `[a, b, c]` not supported, use fixed arrays |
+| Floating-point | Only integers (no decimals), use fixed-point math |
+| `console.log()` | Blockchain has no console output |
+| `typeof` operator | Not available in Solidity |
+| Spread operator | `...` not supported |
+| Destructuring | `{a, b} = obj` not supported |
+| Async/await | Blockchain operations aren't async |
+| Regular expressions | No regex support in Solidity |
+| String manipulation | Limited string operations |
+
+### Why These Limitations Exist
+
+Solidity is designed for **blockchain smart contracts** where:
+- 💰 Every operation costs **gas** (real money)
+- 🔒 **Security** is critical (immutable code)
+- ⛓️ **Resources** are severely limited
+- ⏱️ **Deterministic execution** is required
+- 📦 **State persistence** has high costs
+
+---
+
+## 📘 Examples
+
+### Example 1: Counter Contract
+
+**JavaScript Input:**
 ```javascript
-class Token {
+class Counter {
   constructor() {
-    this.totalSupply = 1000000;
-    this.name = "MyToken";
+    this.count = 0;
   }
 
-  transfer(to, amount) {
-    this.balances = this.balances - amount;
-    return true;
+  increment() {
+    this.count = this.count + 1;
   }
 
-  getBalance() {
-    return this.balances;
+  decrement() {
+    this.count = this.count - 1;
+  }
+
+  getCount() {
+    return this.count;
   }
 }
 ```
 
-### Output (Solidity)
-
+**Solidity Output:**
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract Token {
-  // State variables
-  uint256 public totalSupply;
-  string public name;
+contract Counter {
+  uint256 count;
 
   constructor() {
-    totalSupply = 1000000;
-    name = "MyToken";
+    count = 0;
   }
 
-  function transfer(uint256 to, uint256 amount) public {
-    balances = balances - amount;
-    return true;
+  function increment() public {
+    count = count + 1;
   }
 
-  function getBalance() public {
-    return balances;
+  function decrement() public {
+    count = count - 1;
+  }
+
+  function getCount() public returns (uint256) {
+    return count;
   }
 }
 ```
 
-## ✅ Supported Features
+### Example 2: Bank Contract
 
-### JavaScript Constructs
-- ✅ Classes
-- ✅ Constructors
-- ✅ Methods
-- ✅ Properties
-- ✅ Variables (let, const)
-- ✅ Functions
-- ✅ Expressions (binary, unary, assignment)
-- ✅ Control flow (if/else, while, for)
-- ✅ Member access (object.property)
-- ✅ Function calls
-- ✅ this keyword
+**JavaScript Input:**
+```javascript
+class SimpleBank {
+  constructor() {
+    this.balance = 0;
+  }
 
-### ⚠️ NOT Supported (Solidity Limitations)
-- ❌ Array `.length` property (use fixed-size arrays)
-- ❌ `Math` object functions (Math.floor, Math.max, etc.)
-- ❌ Dynamic arrays (Solidity uses fixed-size)
-- ❌ Array literals `[a, b, c]`
-- ❌ Floating-point numbers (Solidity is integer-only)
-- ❌ `console.log()` (no console in blockchain)
-- ❌ `typeof` operator
-- ❌ Spread operator `...`
-- ❌ Destructuring
-- ❌ Async/await
-- ❌ Regular expressions
+  deposit(amount) {
+    this.balance = this.balance + amount;
+    return this.balance;
+  }
 
-**Why?** Solidity is designed for blockchain smart contracts where every operation costs gas, security is critical, and resources are limited.
-
-### Type Inference
-- ✅ Number → `uint256`
-- ✅ String → `string`
-- ✅ Boolean → `bool`
-- ✅ null → `address(0)`
-
-### Semantic Checks
-- ✅ Undefined variable detection
-- ✅ Type compatibility checking
-- ✅ Duplicate declaration detection
-- ✅ Uninitialized const warnings
-- ✅ Symbol table tracking
-- ✅ Detailed error messages with line/column numbers
-
-## 🧪 Testing
-
-Run the example files to see the compiler in action:
-
-```bash
-# Test all examples
-npm run dev examples/Token.js
-npm run dev examples/Counter.js
-npm run dev examples/SimpleBank.js
-npm run dev examples/Calculator.js
+  withdraw(amount) {
+    if (amount <= this.balance) {
+      this.balance = this.balance - amount;
+      return this.balance;
+    }
+    return this.balance;
+  }
+}
 ```
 
-## 🛠️ Development
+**Solidity Output:**
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-### Available Commands
-```bash
-npm run build      # Build TypeScript to JavaScript
-npm run web        # Start web server on http://localhost:3001
-npm run dev        # Build and run compiler
-npm run demo       # Run interactive demo
-npm run compile    # Run compiler on input
-npm start          # Start compiled version
-npm test           # Run tests
-npm run test:watch # Run tests in watch mode
+contract SimpleBank {
+  uint256 balance;
+
+  constructor() {
+    balance = 0;
+  }
+
+  function deposit(uint256 amount) public returns (uint256) {
+    balance = balance + amount;
+    return balance;
+  }
+
+  function withdraw(uint256 amount) public returns (uint256) {
+    if (amount <= balance) {
+      balance = balance - amount;
+      return balance;
+    }
+    return balance;
+  }
+}
 ```
 
-## 📊 Phase 1 Status
+---
 
-| Component | Status | Description |
-|-----------|--------|-------------|
-| Lexer | ✅ Complete | Tokenizes JavaScript source code |
-| Parser | ✅ Complete | Generates Abstract Syntax Tree |
-| Semantic Analyzer | ✅ Complete | Type checking & symbol table |
-| Code Generator | ✅ Complete | Outputs Solidity code |
-| CLI Tool | ✅ Complete | Command-line interface |
+## 🏗️ Architecture
 
-## 🎓 Learning Outcomes
+### Project Structure
 
-This project demonstrates:
-- **Compiler Design**: Complete compilation pipeline
-- **Data Structures**: Symbol tables, AST, token streams
-- **Algorithms**: Recursive descent parsing, type inference
-- **Pattern Matching**: Token recognition, AST traversal
-- **Type Systems**: Static type checking, type inference
+```
+src/
+├── lexer/
+│   ├── Lexer.ts          # Tokenization logic
+│   └── Token.ts          # Token type definitions
+│
+├── parser/
+│   ├── Parser.ts         # Syntax analysis & AST builder
+│   └── AST.ts            # AST node type definitions
+│
+├── analyzer/
+│   ├── SemanticAnalyzer.ts   # Type checking & validation
+│   ├── SymbolTable.ts        # Symbol management
+│   └── TypeChecker.ts        # Type validation
+│
+├── codegen/
+│   └── CodeGenerator.ts   # Solidity code generation
+│
+├── Compiler.ts           # Main compilation orchestrator
+├── server.ts            # Express web server
+├── index.ts             # CLI entry point
+└── demo.ts              # Interactive demo
 
-## 🚧 Known Limitations (Phase 1)
+public/
+├── index.html           # Web UI
+├── app.js               # Frontend logic
+└── styles.css           # Styling
 
-- No array/mapping support yet
-- Limited type inference for complex expressions
+examples/
+├── Calculator.js
+├── Counter.js
+├── SimpleBank.js
+└── Token.js
+
+tests/
+├── compiler.test.ts
+└── lexer.test.ts
+```
+
+### Data Flow
+
+```
+Source Code (JavaScript)
+    ↓
+Lexer → Token Stream
+    ↓
+Parser → AST
+    ↓
+Semantic Analyzer → Annotated AST + Symbol Table
+    ↓
+Code Generator → Solidity Contract
+    ↓
+Output (Solidity Code)
+```
+
+---
+
+## 🛠️ Available Commands
+
+## 🛠️ Available Commands
+
+```bash
+# Development
+npm run build                    # Compile TypeScript → JavaScript
+npm run web                      # Start web server (http://localhost:3001)
+npm run demo                     # Run interactive CLI demo
+npm run compile                  # Compile JavaScript file
+
+# Testing
+npm test                         # Run unit tests
+npm test:watch                   # Run tests in watch mode
+
+# Utilities
+npm run dev                      # Build and run
+npm start                        # Run compiled version
+npm run clean                    # Remove build artifacts
+```
+
+---
 
 ## 📝 Recent Improvements
 
-### Error Message Enhancements
-- ✅ Real-time error display with line and column numbers
-- ✅ Multiple errors shown simultaneously
-- ✅ Clear error icons (❌ for errors, ⚠️ for warnings)
-- ✅ Highlighted error messages with better contrast
-- ✅ Error panel auto-scrolls to top for visibility
-- ✅ Web UI shows all semantic errors from analysis phase
-- No security vulnerability detection (coming in Phase 2)
-- No optimization passes (coming in Phase 3)
-- Single-file compilation only
+### Error Message Enhancements (v1.1)
+- ✅ **Real-time error display** - Errors shown immediately on compilation attempt
+- ✅ **Line and column numbers** - Exact location of each error
+- ✅ **Multiple errors** - Shows all errors at once, not just first one
+- ✅ **Error icons** - Clear visual distinction (❌ error, ⚠️ warning)
+- ✅ **Better formatting** - Larger font, better contrast, improved layout
+- ✅ **Auto-scroll** - Error panel scrolls to top for visibility
+- ✅ **Semantic errors** - Full analysis results from semantic phase
 
-## 📚 Next Steps (Phase 2 & 3)
+### Web Interface (v1.0)
+- Interactive code editor with syntax highlighting
+- Real-time compilation feedback
+- Template examples for quick start
+- Statistics panel with token/AST/error counts
+- Copy to clipboard and file save features
 
-### Phase 2: Security Analysis
-- Reentrancy detection
-- Integer overflow checks
-- Access control validation
-- Unchecked external call warnings
-- Web-based IDE
+---
 
-### Phase 3: Integration
-- Blockchain deployment (Hardhat)
-- Gas optimization
-- AST visualization
-- Comprehensive testing
-- Live demo
+## 📊 Compilation Statistics
+
+The compiler tracks and displays:
+
+| Metric | What It Means |
+|--------|---------------|
+| **Tokens** | Number of lexical units identified |
+| **AST Nodes** | Number of syntax tree nodes created |
+| **Errors** | Number of compilation errors |
+| **Warnings** | Number of non-critical issues |
+
+---
+
+## 🧪 Testing
+
+Run the built-in test suites:
+
+```bash
+# Run all tests
+npm test
+
+# Run with watch mode
+npm test:watch
+```
+
+Test example files:
+
+```bash
+npm run compile examples/Calculator.js
+npm run compile examples/Counter.js
+npm run compile examples/SimpleBank.js
+npm run compile examples/Token.js
+```
+
+---
+
+## 🎓 Educational Value
+
+This project demonstrates:
+
+| Concept | Implementation |
+|---------|-----------------|
+| **Compiler Design** | Complete 4-stage pipeline |
+| **Lexical Analysis** | Token recognition and classification |
+| **Syntax Analysis** | Recursive descent parser building AST |
+| **Semantic Analysis** | Type checking, symbol tables, scope |
+| **Code Generation** | AST to Solidity conversion |
+| **Type Systems** | Static type inference and validation |
+| **Error Handling** | Detailed error reporting with locations |
+| **Language Design** | JavaScript to Solidity mapping |
+
+---
+
+## 📄 License
+
+MIT License - See LICENSE file for details
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! Areas for improvement:
+
+- [ ] Array and mapping support
+- [ ] Advanced type inference
+- [ ] More Solidity features
+- [ ] Additional examples
+- [ ] Performance optimizations
+- [ ] UI/UX improvements
+
+---
+
+## 👨‍💻 Author
+
+**SUHANI-PAL0103**
+
+Built as an educational compiler project demonstrating complete compiler construction principles with practical JavaScript to Solidity conversion.
+
+---
+
+## 🔗 Links
+
+- **GitHub**: https://github.com/SUHANI-PAL0103/Semantic_analyser
+- **Web Interface**: http://localhost:3001 (after running `npm run web`)
+
+---
+
+✨ **Built with ❤️ for JavaScript to Solidity compilation with comprehensive semantic analysis**
+
+Transform your JavaScript logic into blockchain-ready smart contracts!
 
 ## 🤝 Contributing
 
@@ -296,4 +531,4 @@ Built as part of a semantic analysis compiler project demonstrating compiler con
 
 ---
 
-**Phase 1 Complete!** ✨ Basic JavaScript to Solidity compilation with semantic analysis.
+✨ Built with ❤️ for JavaScript to Solidity compilation with semantic analysis.
