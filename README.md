@@ -45,7 +45,14 @@ npm install
 npm run build
 ```
 
-### 3. Run the Demo
+### 3. Run the Web Interface
+```bash
+npm run web
+```
+
+Then open your browser at: **http://localhost:3001**
+
+### 4. Run the Demo (CLI)
 ```bash
 node dist/demo.js
 ```
@@ -53,6 +60,23 @@ node dist/demo.js
 This will show:
 - ✅ Complete token list with line numbers
 - ✅ Full Abstract Syntax Tree (AST) in JSON format
+
+## 🌐 Web Interface
+
+The project includes an interactive web compiler at `http://localhost:3001`:
+
+- **Live Code Editor** - Write JavaScript and see errors in real-time
+- **Template Examples** - Calculator, Counter, and Bank examples
+- **Real-time Error Display** - Detailed error messages with line and column numbers
+- **Solidity Output Panel** - View generated Solidity code
+- **Statistics** - Token count, AST nodes, and error/warning counts
+
+### Features
+✅ Syntax highlighting with line numbers  
+✅ Detailed error messages showing exact location  
+✅ Copy to clipboard functionality  
+✅ Save/Clear buttons for code management  
+✅ Responsive VS Code-style interface
 
 ## 📊 What the Demo Shows
 
@@ -146,6 +170,21 @@ contract Token {
 - ✅ Function calls
 - ✅ this keyword
 
+### ⚠️ NOT Supported (Solidity Limitations)
+- ❌ Array `.length` property (use fixed-size arrays)
+- ❌ `Math` object functions (Math.floor, Math.max, etc.)
+- ❌ Dynamic arrays (Solidity uses fixed-size)
+- ❌ Array literals `[a, b, c]`
+- ❌ Floating-point numbers (Solidity is integer-only)
+- ❌ `console.log()` (no console in blockchain)
+- ❌ `typeof` operator
+- ❌ Spread operator `...`
+- ❌ Destructuring
+- ❌ Async/await
+- ❌ Regular expressions
+
+**Why?** Solidity is designed for blockchain smart contracts where every operation costs gas, security is critical, and resources are limited.
+
 ### Type Inference
 - ✅ Number → `uint256`
 - ✅ String → `string`
@@ -158,6 +197,7 @@ contract Token {
 - ✅ Duplicate declaration detection
 - ✅ Uninitialized const warnings
 - ✅ Symbol table tracking
+- ✅ Detailed error messages with line/column numbers
 
 ## 🧪 Testing
 
@@ -173,19 +213,16 @@ npm run dev examples/Calculator.js
 
 ## 🛠️ Development
 
-### Build
+### Available Commands
 ```bash
-npm run build
-```
-
-### Run with TypeScript directly
-```bash
-npm run dev <file>
-```
-
-### Start compiled version
-```bash
-npm start <file>
+npm run build      # Build TypeScript to JavaScript
+npm run web        # Start web server on http://localhost:3001
+npm run dev        # Build and run compiler
+npm run demo       # Run interactive demo
+npm run compile    # Run compiler on input
+npm start          # Start compiled version
+npm test           # Run tests
+npm run test:watch # Run tests in watch mode
 ```
 
 ## 📊 Phase 1 Status
@@ -211,6 +248,16 @@ This project demonstrates:
 
 - No array/mapping support yet
 - Limited type inference for complex expressions
+
+## 📝 Recent Improvements
+
+### Error Message Enhancements
+- ✅ Real-time error display with line and column numbers
+- ✅ Multiple errors shown simultaneously
+- ✅ Clear error icons (❌ for errors, ⚠️ for warnings)
+- ✅ Highlighted error messages with better contrast
+- ✅ Error panel auto-scrolls to top for visibility
+- ✅ Web UI shows all semantic errors from analysis phase
 - No security vulnerability detection (coming in Phase 2)
 - No optimization passes (coming in Phase 3)
 - Single-file compilation only
